@@ -1,8 +1,8 @@
 // src/pages/BlogFeed.jsx
 import { Link } from "react-router-dom";
+import "../styles/BlogFeed.css";
 
 export default function BlogFeed() {
-  // Sample blog posts — replace later with API data
   const posts = [
     {
       id: 1,
@@ -31,27 +31,17 @@ export default function BlogFeed() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h1 className="text-4xl font-bold mb-6">Latest Blog Posts</h1>
+    <div className="blog-container">
+      <h1 className="blog-title">Latest Blog Posts</h1>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="blog-grid">
         {posts.map((post) => (
-          <Link
-            to={`/blog/${post.id}`}
-            key={post.id}
-            className="bg-white rounded-xl shadow hover:shadow-lg transition duration-300"
-          >
-            {/* Image */}
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full h-48 object-cover rounded-t-xl"
-            />
+          <Link to={`/blog/${post.id}`} key={post.id} className="blog-card">
+            <img src={post.image} alt={post.title} className="blog-image" />
 
-            {/* Card Content */}
-            <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-              <p className="text-sm text-gray-600">
+            <div className="blog-content">
+              <h2 className="blog-post-title">{post.title}</h2>
+              <p className="blog-meta">
                 {post.author} • {post.date}
               </p>
             </div>

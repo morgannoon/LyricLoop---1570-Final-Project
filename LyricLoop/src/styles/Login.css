@@ -1,0 +1,151 @@
+/* Login.css - Spotify-inspired, clean and responsive */
+
+:root{
+    --bg:#121212;
+    --card:#1e1e1e;
+    --accent:#1db954; /* spotify green */
+    --muted:#b3b3b3;
+    --text:#f5f5f5;
+    --danger:#e15353;
+    --glass: rgba(255,255,255,0.03);
+  }
+  
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: "Helvetica Neue", Arial, sans-serif; background: linear-gradient(180deg,var(--bg), #0f0f0f); color:var(--text); }
+  
+  /* outer centering */
+  .spotify-login-outer{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+  }
+  
+  /* card */
+  .spotify-login-card{
+    width: min(420px, 96%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;
+    padding:24px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+  
+  /* header: title + toggle */
+  .login-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  
+  .title{
+    margin:0;
+    font-size:1.25rem;
+    font-weight:700;
+    letter-spacing: -0.02em;
+  }
+  
+  .role-toggle{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid rgba(255,255,255,0.04);
+    padding:8px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    font-size:0.9rem;
+    transition: all 160ms ease;
+  }
+  .role-toggle:hover{
+    color:var(--text);
+    transform: translateY(-1px);
+  }
+  
+  /* form fields */
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:12px;
+  }
+  
+  .field label{
+    font-size:0.85rem;
+    color:var(--muted);
+  }
+  
+  .field input{
+    padding:12px 14px;
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius:8px;
+    color:var(--text);
+    font-size:1rem;
+    outline:none;
+    transition: box-shadow 120ms ease, border-color 120ms ease;
+  }
+  .field input::placeholder{ color: rgba(255,255,255,0.25); }
+  
+  .field input:focus{
+    border-color: rgba(29,185,84,0.15);
+    box-shadow: 0 6px 18px rgba(29,185,84,0.06);
+  }
+  
+  /* small hint text */
+  .hint{
+    margin-top:6px;
+    font-size:0.8rem;
+    color:var(--muted);
+  }
+  
+  /* error */
+  .error{
+    background: rgba(225,81,81,0.08);
+    border: 1px solid rgba(225,81,81,0.12);
+    color: var(--danger);
+    padding:10px 12px;
+    border-radius:8px;
+    margin: 6px 0 12px;
+    font-size:0.95rem;
+  }
+  
+  /* submit button */
+  .submit-btn{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:none;
+    background: linear-gradient(90deg, var(--accent), #0bb44f);
+    color:#06210b;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+    box-shadow: 0 8px 30px rgba(29,185,84,0.12);
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+  .submit-btn:active{ transform: translateY(1px); }
+  .submit-btn:disabled{ opacity:0.7; cursor:default; transform:none; }
+  
+  /* footer */
+  .login-footer{
+    margin-top:14px;
+    font-size:0.9rem;
+    color:var(--muted);
+    text-align:center;
+  }
+  .login-footer a{
+    color:var(--text);
+    text-decoration:underline;
+  }
+  
+  /* admin note small */
+  .admin-note{ color: var(--muted); font-size:0.88rem; }
+  
+  /* responsive tweaks */
+  @media (max-width:420px){
+    .spotify-login-card{ padding:18px; border-radius:10px; }
+    .title{ font-size:1.1rem; }
+  }
+  

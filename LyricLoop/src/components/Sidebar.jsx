@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
@@ -7,9 +7,7 @@ export default function Sidebar() {
 
   // Example logout function
   const handleLogout = () => {
-    // Clear user session / token
     localStorage.removeItem("userToken"); // adjust based on your auth
-    // Redirect to login
     navigate("/login");
   };
 
@@ -39,6 +37,14 @@ export default function Sidebar() {
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <FaSearch className="nav-icon" />
+          <span className="nav-label"></span>
+        </NavLink>
+
+        <NavLink
+          to="/profile/edit"
+          className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+        >
+          <FaUserEdit className="nav-icon" />
           <span className="nav-label"></span>
         </NavLink>
       </nav>

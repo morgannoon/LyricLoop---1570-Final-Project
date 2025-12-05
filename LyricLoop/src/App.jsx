@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar.jsx";
 import BlogFeed from "./pages/BlogFeed.jsx";
 import Login from "./pages/Login.jsx";
+import CreatePost from "./pages/CreatePost.jsx";
+import SearchPage from "./pages/SearchPage.jsx"; // create this if you want a dedicated search page
+
 import "./App.css";
 
 function App() {
@@ -24,11 +27,11 @@ function App() {
             {/* Admin login */}
             <Route path="/admin/login" element={<Login initialRole="admin" />} />
 
-            {/* Create Post placeholder */}
-            <Route path="/create" element={<h2>Create Post Page</h2>} />
+            {/* Create Post page */}
+            <Route path="/create" element={<CreatePost />} />
 
-            {/* Search placeholder */}
-            <Route path="/search" element={<h2>Search Page</h2>} />
+            {/* Search page */}
+            <Route path="/search" element={SearchPage ? <SearchPage /> : <h2>Search Page</h2>} />
 
             {/* Catch-all redirects to home */}
             <Route path="*" element={<Navigate to="/" replace />} />

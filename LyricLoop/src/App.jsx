@@ -1,17 +1,22 @@
+// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar.jsx";
 import BlogFeed from "./pages/BlogFeed.jsx";
 import Login from "./pages/Login.jsx";
+import SignUp from "./pages/SignUp.jsx";       // <-- added
 import CreatePost from "./pages/CreatePost.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 
 import "./App.css";
 
-// Layout wrapper to hide sidebar on login pages
+// Layout wrapper to hide sidebar on login or signup pages
 function Layout({ children }) {
   const location = useLocation();
-  const hideSidebar = location.pathname === "/login" || location.pathname === "/admin/login";
+  const hideSidebar =
+    location.pathname === "/login" ||
+    location.pathname === "/admin/login" ||
+    location.pathname === "/signup";   // <-- hide sidebar on signup
 
   return (
     <div className="app-container" style={{ display: "flex" }}>
@@ -43,6 +48,9 @@ function App() {
 
           {/* Admin login */}
           <Route path="/admin/login" element={<Login initialRole="admin" />} />
+
+          {/* Sign Up page */}
+          <Route path="/signup" element={<SignUp />} />
 
           {/* Create Post page */}
           <Route path="/create" element={<CreatePost />} />

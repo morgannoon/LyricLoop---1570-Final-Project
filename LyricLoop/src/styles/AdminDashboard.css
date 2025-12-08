@@ -342,3 +342,40 @@
     font-size: 1.8rem;
   }
 }
+
+.admin-nav {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0 30px;
+  flex-wrap: wrap;
+}
+
+.nav-pill {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #181818;
+  color: #e5e5e5;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.nav-pill:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.nav-pill.active {
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+  color: #0b0b0b;
+  border-color: transparent;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.card-subtitle {
+  color: #b3b3b3;
+  margin: -8px 0 20px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}

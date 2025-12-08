@@ -8,6 +8,9 @@ import CreatePost from "./pages/CreatePost.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminReports from "./pages/AdminReports.jsx";
+import AdminAnalytics from "./pages/AdminAnalytics.jsx";
+import AdminTime from "./pages/AdminTime.jsx";
 
 import "./App.css";
 
@@ -64,6 +67,9 @@ function App() {
 
           {/* Admin Dashboard */}
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
+          <Route path="/admin/time" element={<AdminTime />} />
 
           {/* Catch-all redirects to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

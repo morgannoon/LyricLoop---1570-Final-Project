@@ -1,5 +1,5 @@
 .sidebar {
-    width: 120px;
+    width: 180px;
     height: 100vh;
     position: fixed;
     left: 0;
@@ -7,32 +7,43 @@
     background-color: #1db954; /* Spotify green */
     display: flex;
     flex-direction: column;
-    padding: 24px 16px;
+    padding: 24px 20px;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
   }
-  
+
   .sidebar-logo {
     color: #fff;
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     text-align: center;
-
   }
-  
+
   .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
-  
+
   .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     color: #e0e0e0;
     text-decoration: none;
     font-weight: 500;
-    padding: 10px 12px;
-    border-radius: 8px;
+    padding: 14px 16px;
+    border-radius: 10px;
     transition: all 0.2s ease;
+  }
+
+  .nav-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .nav-label {
+    font-size: 0.95rem;
   }
   
   .nav-item:hover {

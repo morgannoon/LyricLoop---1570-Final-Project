@@ -1,0 +1,344 @@
+.admin-dashboard {
+  padding: 40px;
+  background-color: #121212;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #b3b3b3;
+}
+
+/* Stats Overview */
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+  min-width: 70px;
+  min-height: 70px;
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.stat-icon.users-icon {
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+  color: #fff;
+}
+
+.stat-icon.time-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: #fff;
+}
+
+.stat-icon.reports-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: #fff;
+}
+
+.stat-icon.music-icon {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  color: #fff;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Content Grid */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.dashboard-card {
+  background: linear-gradient(145deg, #1e1e1e 0%, #252525 100%);
+  border-radius: 16px;
+  padding: 28px 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #fff;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* User List */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.user-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.user-rank {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1db954;
+  min-width: 35px;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.user-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.user-followers {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Song List */
+.song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.song-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.song-rank {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1db954;
+  min-width: 35px;
+}
+
+.song-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.song-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.song-artist {
+  font-size: 0.85rem;
+  color: #b3b3b3;
+}
+
+.song-plays {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.mini-stat {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.mini-stat:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mini-stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1db954;
+}
+
+.mini-stat-label {
+  font-size: 0.85rem;
+  color: #b3b3b3;
+  text-align: center;
+}
+
+/* Reports Breakdown */
+.reports-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.report-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border-left: 4px solid #b3b3b3;
+  transition: background 0.2s ease;
+}
+
+.report-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.report-item.cleared {
+  border-left-color: #1db954;
+}
+
+.report-item.needs-review {
+  border-left-color: #f59e0b;
+}
+
+.report-item.under-review {
+  border-left-color: #3b82f6;
+}
+
+.report-label {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.report-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stats-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 20px;
+  }
+
+  .stats-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-title {
+    font-size: 1.8rem;
+  }
+}

@@ -3,10 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Sidebar from "./components/Sidebar.jsx";
 import BlogFeed from "./pages/BlogFeed.jsx";
 import Login from "./pages/Login.jsx";
-import SignUp from "./pages/SignUp.jsx";       // <-- added
+import SignUp from "./pages/SignUp.jsx";       
 import CreatePost from "./pages/CreatePost.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 import "./App.css";
 
@@ -16,7 +17,7 @@ function Layout({ children }) {
   const hideSidebar =
     location.pathname === "/login" ||
     location.pathname === "/admin/login" ||
-    location.pathname === "/signup";   // <-- hide sidebar on signup
+    location.pathname === "/signup";   
 
   return (
     <div className="app-container" style={{ display: "flex" }}>
@@ -24,7 +25,7 @@ function Layout({ children }) {
       <div
         className="main-content"
         style={{
-          marginLeft: hideSidebar ? "0" : "220px",
+          marginLeft: hideSidebar ? "0" : "180px",
           width: "100%",
           padding: "20px",
         }}
@@ -60,6 +61,9 @@ function App() {
 
           {/* Edit Profile page */}
           <Route path="/profile/edit" element={<EditProfile />} />
+
+          {/* Admin Dashboard */}
+          <Route path="/admin" element={<AdminDashboard />} />
 
           {/* Catch-all redirects to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

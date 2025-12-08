@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import { FaUsers, FaClock, FaFlag, FaMusic } from "react-icons/fa";
 import "../styles/AdminDashboard.css";
 
@@ -72,6 +73,21 @@ export default function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <h1 className="dashboard-title">Admin Dashboard</h1>
+
+      <div className="admin-nav">
+        <NavLink to="/admin" className={({ isActive }) => `nav-pill ${isActive ? "active" : ""}`}>
+          Overview
+        </NavLink>
+        <NavLink to="/admin/reports" className={({ isActive }) => `nav-pill ${isActive ? "active" : ""}`}>
+          Reports
+        </NavLink>
+        <NavLink to="/admin/analytics" className={({ isActive }) => `nav-pill ${isActive ? "active" : ""}`}>
+          Analytics
+        </NavLink>
+        <NavLink to="/admin/time" className={({ isActive }) => `nav-pill ${isActive ? "active" : ""}`}>
+          Time
+        </NavLink>
+      </div>
 
       {/* Stats Overview */}
       <div className="stats-overview">

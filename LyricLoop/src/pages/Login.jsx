@@ -6,14 +6,13 @@ import "../styles/Login.css";
 
 /**
  * Props:
- *  - onSubmit({ role, email, password, adminCode? }) : function to handle submit
+ *  - onSubmit({ role, email, password }) : function to handle submit
  *  - initialRole: "user" | "admin" (optional)
  */
 export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
   const [role, setRole] = useState(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [adminCode, setAdminCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
     if (!email.trim()) return "Email is required.";
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email.";
     if (!password) return "Password is required.";
-    if (role === "admin" && !adminCode.trim()) return "Admin code is required.";
     return null;
   };
 
@@ -43,7 +41,7 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
       const { token, user } = await loginUser(email, password);
       login({ user, token });
 
-      await Promise.resolve(onSubmit({ role, email, password, adminCode }));
+      await Promise.resolve(onSubmit({ role, email, password }));
       navigate("/");
     } catch (err) {
       setError(err?.response?.data?.error || "Login failed. Try again.");
@@ -92,25 +90,10 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete={role === "admin" ? "current-password" : "on"}
+            autoComplete="current-password"
             required
           />
         </div>
-
-        {role === "admin" && (
-          <div className="field">
-            <label htmlFor="adminCode">Admin code</label>
-            <input
-              id="adminCode"
-              type="password"
-              placeholder="Enter admin code"
-              value={adminCode}
-              onChange={(e) => setAdminCode(e.target.value)}
-              autoComplete="off"
-            />
-            <small className="hint">Admins only — your secret management code.</small>
-          </div>
-        )}
 
         {error && <div role="alert" className="error">{error}</div>}
 

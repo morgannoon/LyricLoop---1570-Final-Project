@@ -20,8 +20,13 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
 
   const toggleRole = () => {
     setError("");
-    setRole((r) => (r === "user" ? "admin" : "user"));
+    setRole((r) => {
+      const newRole = r === "user" ? "admin" : "user";
+      navigate(newRole === "admin" ? "/admin/login" : "/login");
+      return newRole;
+    });
   };
+  
 
   const validate = () => {
     if (!email.trim()) return "Email is required.";

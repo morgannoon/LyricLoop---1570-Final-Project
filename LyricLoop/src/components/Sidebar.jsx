@@ -30,11 +30,11 @@ export default function Sidebar() {
             </NavLink>
 
             <NavLink
-              to="/admin/stats"
+              to="/admin/analytics"
               className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
             >
               <FaChartLine className="nav-icon" />
-              <span className="nav-label">Stats</span>
+              <span className="nav-label">Analytics</span>
             </NavLink>
 
             <NavLink

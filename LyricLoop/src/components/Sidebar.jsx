@@ -1,12 +1,25 @@
 import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import {
+  FaHome,
+  FaPlusCircle,
+  FaSearch,
+  FaSignOutAlt,
+  FaUserEdit,
+  FaChartLine,
+  FaFlag,
+  FaClock
+} from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext.jsx";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
+  const location = useLocation();
+
+  // Automatically detect if user is on an admin route
+  const isAdminPage = location.pathname.startsWith("/admin");
 
   const handleLogout = () => {
     logout();
@@ -90,7 +103,7 @@ export default function Sidebar() {
         )}
       </nav>
 
-      {/* Logout button at the bottom */}
+      {/* Logout button */}
       <button className="nav-item logout-btn" onClick={handleLogout}>
         <FaSignOutAlt className="nav-icon" />
         <span className="nav-label"></span>

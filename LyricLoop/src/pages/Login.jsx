@@ -10,7 +10,7 @@ import "../styles/Login.css";
  *  - initialRole: "user" | "admin" (optional)
  */
 export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
-  const [role, setRole] = useState(initialRole); // "user" or "admin"
+  const [role, setRole] = useState(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [adminCode, setAdminCode] = useState("");
@@ -26,7 +26,6 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
 
   const validate = () => {
     if (!email.trim()) return "Email is required.";
-    // simple email check
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email.";
     if (!password) return "Password is required.";
     if (role === "admin" && !adminCode.trim()) return "Admin code is required.";
@@ -37,17 +36,13 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
     e.preventDefault();
     setError("");
     const v = validate();
-    if (v) {
-      setError(v);
-      return;
-    }
+    if (v) return setError(v);
 
     setLoading(true);
     try {
       const { token, user } = await loginUser(email, password);
       login({ user, token });
 
-      // Allow optional parent handler to run after successful login
       await Promise.resolve(onSubmit({ role, email, password, adminCode }));
       navigate("/");
     } catch (err) {
@@ -80,7 +75,6 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
           <label htmlFor="email">Email</label>
           <input
             id="email"
-            name="email"
             type="email"
             placeholder="you@music.com"
             value={email}
@@ -94,7 +88,6 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
           <label htmlFor="password">Password</label>
           <input
             id="password"
-            name="password"
             type="password"
             placeholder="••••••••"
             value={password}
@@ -109,7 +102,6 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
             <label htmlFor="adminCode">Admin code</label>
             <input
               id="adminCode"
-              name="adminCode"
               type="password"
               placeholder="Enter admin code"
               value={adminCode}

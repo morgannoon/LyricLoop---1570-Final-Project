@@ -1,17 +1,15 @@
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt, FaUserEdit, FaChartLine, FaFlag, FaClock } from "react-icons/fa";
+import { useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext.jsx";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { logout } = useContext(AuthContext);
 
-  // Check if we're on an admin page
-  const isAdminPage = location.pathname.startsWith("/admin");
-
-  // Example logout function
   const handleLogout = () => {
-    localStorage.removeItem("userToken"); // adjust based on your auth
+    logout();
     navigate("/login");
   };
 

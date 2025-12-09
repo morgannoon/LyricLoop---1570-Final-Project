@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../api"; // your combined API file
+import { registerUser } from "../api";
 import "../styles/SignUp.css";
 
 export default function SignUp() {
@@ -10,7 +10,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,78 +23,78 @@ export default function SignUp() {
       return;
     }
 
+    setLoading(true);
     try {
       await registerUser(username, email, password);
-      setSuccess("Account created successfully! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      setSuccess("Account created! Redirecting to login…");
+      setTimeout(() => navigate("/login"), 1200);
     } catch (err) {
-      setError(err.response?.data?.error || "Registration failed");
+      setError(err?.response?.data?.error || err?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="spotify-signup-outer">
-      <div className="spotify-signup-card">
-        <div className="signup-header">
-          <h1>Sign Up</h1>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label>Username</label>
+    <div className="signup-outer">
+      <div className="signup-card">
+        <h1>Create your account</h1>
+        <form onSubmit={handleSubmit} className="signup-form">
+          <label>
+            Username
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              placeholder="Enter your username"
+              placeholder="Your display name"
             />
-          </div>
+          </label>
 
-          <div className="field">
-            <label>Email</label>
+          <label>
+            Email
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="you@music.com"
             />
-          </div>
+          </label>
 
-          <div className="field">
-            <label>Password</label>
+          <label>
+            Password
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder="••••••••"
             />
-          </div>
+          </label>
 
-          <div className="field">
-            <label>Confirm Password</label>
+          <label>
+            Confirm Password
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              placeholder="Confirm your password"
+              placeholder="Repeat password"
             />
-          </div>
+          </label>
 
-          {error && <p className="error">{error}</p>}
-          {success && <p className="success">{success}</p>}
+          {error && <div className="signup-error">{error}</div>}
+          {success && <div className="signup-success">{success}</div>}
 
-          <button type="submit" className="submit-btn">
-            Sign Up
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <div className="signup-footer">
-          Already have an account? <a href="/login">Log In</a>
-        </div>
+        <p className="signup-footer">
+          Already have an account? <a href="/login">Log in</a>
+        </p>
       </div>
     </div>
   );

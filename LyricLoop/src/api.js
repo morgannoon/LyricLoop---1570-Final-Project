@@ -1,74 +1,125 @@
-// src/api.js
 import axios from "axios";
 
-// --- BASE SETUP ---
-const API_BASE = "http://localhost:5000/api";
+// Base URLs for backend (primary + fallback). Primary defaults to root server,
+// fallback to /api for the ESM backend. Override with VITE_API_BASE to lock in a single base.
+const PRIMARY_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000";
+const SECONDARY_BASE = import.meta.env.VITE_API_BASE ? null : "http://localhost:5000/api";
 
-// Retrieve JWT token from localStorage
+// Token helpers
 const getToken = () => localStorage.getItem("userToken");
-
-// Axios instance
-const axiosInstance = axios.create({
-  baseURL: API_BASE,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-// Attach token to each request if available
-axiosInstance.interceptors.request.use((config) => {
-  const token = getToken();
+export const setAuthToken = (token) => {
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    localStorage.setItem("userToken", token);
+  } else {
+    localStorage.removeItem("userToken");
   }
-  return config;
-});
+};
 
-// =========================
-// AUTH FUNCTIONS
-// =========================
+// Axios instance factory with auth header
+const createInstance = (baseURL) => {
+  const instance = axios.create({
+    baseURL,
+    headers: { "Content-Type": "application/json" },
+  });
 
-// Login user
+  instance.interceptors.request.use((config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
+  return instance;
+};
+
+const primary = createInstance(PRIMARY_BASE);
+const secondary = SECONDARY_BASE ? createInstance(SECONDARY_BASE) : null;
+
+const withFallback = async (fn) => {
+  try {
+    return await fn(primary);
+  } catch (err) {
+    if (secondary) {
+      return await fn(secondary);
+    }
+    throw err;
+  }
+};
+
+// ---------- AUTH ----------
+// Send both camelCase and capitalized keys so either backend flavor accepts the payload.
 export const loginUser = async (email, password) => {
-  const res = await axiosInstance.post("/auth/login", { email, password });
-  return res.data; // returns { token, user }
+  return withFallback(async (instance) => {
+    const res = await instance.post("/auth/login", {
+      email,
+      password,
+      Email: email,
+      Password: password,
+    });
+    return res.data; // { token, user }
+  });
 };
 
-// Register user
-export const registerUser = async (username, email, password) => {
-  const res = await axiosInstance.post("/auth/register", { username, email, password });
-  return res.data;
+export const registerUser = async (username, email, password, profileImageUrl = "") => {
+  return withFallback(async (instance) => {
+    const res = await instance.post("/auth/register", {
+      username,
+      email,
+      password,
+      UserID: username,
+      Email: email,
+      Password: password,
+      ProfileImageURL: profileImageUrl,
+    });
+    return res.data;
+  });
 };
 
-// Logout user
 export const logoutUser = () => {
-  localStorage.removeItem("userToken");
+  setAuthToken(null);
+  localStorage.removeItem("user");
 };
 
-// =========================
-// POSTS FUNCTIONS
-// =========================
-
-// Get all posts
+// ---------- POSTS ----------
 export const getPosts = async () => {
-  const res = await axiosInstance.get("/posts");
-  return res.data;
+  return withFallback(async (instance) => {
+    const res = await instance.get("/posts");
+    return res.data;
+  });
 };
 
-// Create a new post
 export const createPost = async (title, content, image) => {
-  const res = await axiosInstance.post("/posts", { title, content, image });
-  return res.data;
+  return withFallback(async (instance) => {
+    const res = await instance.post("/posts", {
+      title,
+      content,
+      image,
+      Title: title,
+      Description: content,
+      SongURL: image,
+    });
+    return res.data;
+  });
 };
 
-// Update a post
 export const updatePost = async (id, title, content, image) => {
-  const res = await axiosInstance.put(`/posts/${id}`, { title, content, image });
-  return res.data;
+  return withFallback(async (instance) => {
+    const res = await instance.put(`/posts/${id}`, {
+      title,
+      content,
+      image,
+      Title: title,
+      Description: content,
+      SongURL: image,
+    });
+    return res.data;
+  });
 };
 
-// Delete a post
 export const deletePost = async (id) => {
-  const res = await axiosInstance.delete(`/posts/${id}`);
-  return res.data;
+  return withFallback(async (instance) => {
+    const res = await instance.delete(`/posts/${id}`);
+    return res.data;
+  });
 };

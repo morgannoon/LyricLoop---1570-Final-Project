@@ -45,3 +45,37 @@
 .create-post-button:hover {
   background-color: #17a44b;
 }
+
+.create-post-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.create-post-warning,
+.create-post-error,
+.create-post-success {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.create-post-warning {
+  background: #fff4d8;
+  color: #a35c00;
+  margin-bottom: 12px;
+}
+
+.create-post-error {
+  background: #ffeaea;
+  color: #a40000;
+}
+
+.create-post-success {
+  background: #e7ffe9;
+  color: #0f6e34;
+}
+
+.create-post-login-link {
+  color: #0bb44f;
+  font-weight: 700;
+}

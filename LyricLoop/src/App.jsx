@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Sidebar from "./components/Sidebar.jsx";
 import BlogFeed from "./pages/BlogFeed.jsx";
 import Login from "./pages/Login.jsx";
-import SignUp from "./pages/SignUp.jsx";       
+import SignUp from "./pages/SignUp.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -20,7 +20,7 @@ function Layout({ children }) {
   const hideSidebar =
     location.pathname === "/login" ||
     location.pathname === "/admin/login" ||
-    location.pathname === "/signup";   
+    location.pathname === "/signup";
 
   return (
     <div className="app-container" style={{ display: "flex" }}>
@@ -53,7 +53,7 @@ function App() {
           {/* Admin login */}
           <Route path="/admin/login" element={<Login initialRole="admin" />} />
 
-          {/* Sign Up page */}
+          {/* Sign up */}
           <Route path="/signup" element={<SignUp />} />
 
           {/* Create Post page */}

@@ -45,7 +45,7 @@ function App() {
       <Layout>
         <Routes>
           {/* Public blog feed */}
-          <Route path="/" element={<BlogFeed />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* User login */}
           <Route path="/login" element={<Login initialRole="user" />} />

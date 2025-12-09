@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
-import { loginUser } from "../api";
+import { loginUser, loginAdmin } from "../api";
 import "../styles/Login.css";
 
 /**
@@ -38,11 +38,13 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
 
     setLoading(true);
     try {
-      const { token, user } = await loginUser(email, password);
-      login({ user, token });
+      const authFn = role === "admin" ? loginAdmin : loginUser;
+      const { token, user, admin } = await authFn(email, password);
+      const principal = role === "admin" ? { ...admin, role: "admin" } : { ...user, role: "user" };
+      login({ user: principal, token });
 
       await Promise.resolve(onSubmit({ role, email, password }));
-      navigate("/");
+      navigate(role === "admin" ? "/admin" : "/");
     } catch (err) {
       setError(err?.response?.data?.error || "Login failed. Try again.");
     } finally {

@@ -61,6 +61,18 @@ export const loginUser = async (email, password) => {
   });
 };
 
+export const loginAdmin = async (email, password) => {
+  return withFallback(async (instance) => {
+    const res = await instance.post("/auth/admin/login", {
+      email,
+      password,
+      Email: email,
+      Password: password,
+    });
+    return res.data; // { token, admin }
+  });
+};
+
 export const registerUser = async (username, email, password, profileImageUrl = "") => {
   return withFallback(async (instance) => {
     const res = await instance.post("/auth/register", {

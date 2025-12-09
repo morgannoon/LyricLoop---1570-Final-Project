@@ -47,4 +47,23 @@ router.post("/login", async (req, res) => {
   res.json({ token, user });
 });
 
+// ADMIN LOGIN
+router.post("/admin/login", async (req, res) => {
+  const { Email, Password } = req.body;
+
+  const admin = await Admin.findOne({ Email });
+  if (!admin) return res.status(400).json({ error: "Admin not found" });
+
+  const valid = await bcrypt.compare(Password, admin.Password);
+  if (!valid) return res.status(400).json({ error: "Invalid password" });
+
+  const token = jwt.sign(
+    { id: admin._id.toString(), role: "admin" },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+
+  res.json({ token, admin });
+});
+
 module.exports = router;

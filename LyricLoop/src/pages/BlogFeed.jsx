@@ -1,52 +1,141 @@
 // src/pages/BlogFeed.jsx
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { deletePost, getPosts, updatePost } from "../api";
 import "../styles/BlogFeed.css";
 
 export default function BlogFeed() {
-  const posts = [
-    {
-      id: 1,
-      title: "Top 10 Underrated Indie Artists Right Now",
-      author: "Morgan",
-      date: "Dec 5, 2025",
-      image:
-        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800",
-    },
-    {
-      id: 2,
-      title: "Why Vinyl Is Making a Massive Comeback",
-      author: "Alex",
-      date: "Dec 3, 2025",
-      image:
-        "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=800",
-    },
-    {
-      id: 3,
-      title: "The Science Behind Music That Boosts Productivity",
-      author: "Taylor",
-      date: "Nov 30, 2025",
-      image:
-        "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800",
-    },
-  ];
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
+
+  const currentUserId = useMemo(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("user"));
+      return stored?._id ? stored._id.toString() : null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const data = await getPosts();
+        setPosts(data);
+      } catch (err) {
+        setError(err?.response?.data?.error || "Failed to load posts.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    try {
+      await deletePost(id);
+      setPosts((prev) => prev.filter((p) => p._id !== id));
+    } catch (err) {
+      setError(err?.response?.data?.error || "Could not delete the post.");
+    }
+  };
+
+  const handleEdit = (post) => {
+    setEditingId(post._id);
+    setEditTitle(post.Title);
+    setEditContent(post.Description || "");
+  };
+
+  const handleSave = async (id) => {
+    try {
+      const updated = await updatePost(
+        id,
+        editTitle,
+        editContent,
+        posts.find((p) => p._id === id)?.SongURL || posts.find((p) => p._id === id)?.image || ""
+      );
+      setPosts((prev) => prev.map((p) => (p._id === id ? updated : p)));
+      setEditingId(null);
+    } catch (err) {
+      setError(err?.response?.data?.error || "Could not update the post.");
+    }
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+  };
 
   return (
     <div className="blog-container">
-      <h1 className="blog-title">Latest Blog Posts</h1>
+      <div className="blog-title-row">
+        <h1 className="blog-title">Latest Blog Posts</h1>
+        <Link to="/create" className="create-link">
+          + New Post
+        </Link>
+      </div>
+
+      {error && <div className="blog-error">{error}</div>}
+      {loading && <p>Loading posts...</p>}
+      {!loading && posts.length === 0 && <p>No posts yet. Be the first to share!</p>}
 
       <div className="blog-grid">
-        {posts.map((post) => (
-          <Link to={`/blog/${post.id}`} key={post.id} className="blog-card">
-            <img src={post.image} alt={post.title} className="blog-image" />
-
+        {posts.map((post) => {
+          const postTitle = post.Title || post.title;
+          const postDesc = post.Description || post.content;
+          const postImage = post.SongURL || post.image;
+          const postAuthor = post.UserID?.Email || post.author?.username || post.author?.email || "Unknown";
+          const postAuthorId = post.UserID?._id?.toString() || post.author?._id?.toString() || post.author?._id || null;
+          return (
+          <div key={post._id} className="blog-card">
+            {postImage && <img src={postImage} alt={postTitle} className="blog-image" />}
             <div className="blog-content">
-              <h2 className="blog-post-title">{post.title}</h2>
-              <p className="blog-meta">
-                {post.author} • {post.date}
-              </p>
+              {editingId === post._id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="edit-input"
+                  />
+                  <textarea
+                    rows={4}
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    className="edit-textarea"
+                  />
+                  <div className="edit-buttons">
+                    <button onClick={() => handleSave(post._id)}>Save</button>
+                    <button onClick={handleCancel}>Cancel</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2 className="blog-post-title">{postTitle}</h2>
+                  <p className="blog-meta">
+                    {postAuthor} •{" "}
+                    {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}
+                  </p>
+                  {postDesc && <p className="blog-description">{postDesc}</p>}
+                  {postAuthorId === currentUserId && (
+                    <div className="post-actions">
+                      <button onClick={() => handleEdit(post)}>Edit</button>
+                      <button onClick={() => handleDelete(post._id)}>Delete</button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          </Link>
-        ))}
+          </div>
+          );
+        })}
       </div>
     </div>
   );

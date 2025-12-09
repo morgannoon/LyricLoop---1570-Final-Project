@@ -1,13 +1,15 @@
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaHome, FaPlusCircle, FaSearch, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext.jsx";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
-  // Example logout function
   const handleLogout = () => {
-    localStorage.removeItem("userToken"); // adjust based on your auth
+    logout();
     navigate("/login");
   };
 

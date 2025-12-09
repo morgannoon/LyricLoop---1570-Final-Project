@@ -6,7 +6,25 @@ const connectDB = require("./config/db");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    // Allow all origins dynamically (sufficient for token-in-header auth)
+    origin: (origin, cb) => cb(null, true),
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: false,
+  })
+);
+
+// Explicit preflight handler to ensure CORS headers are always sent
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 // connect to MongoDB
 connectDB();

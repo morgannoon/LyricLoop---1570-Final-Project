@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { loginUser } from "../api";
 import "../styles/Login.css";
 
 /**
@@ -13,6 +16,8 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
   const [adminCode, setAdminCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const toggleRole = () => {
     setError("");
@@ -39,10 +44,14 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
 
     setLoading(true);
     try {
-      // call parent handler (replace with real API call)
+      const { token, user } = await loginUser(email, password);
+      login({ user, token });
+
+      // Allow optional parent handler to run after successful login
       await Promise.resolve(onSubmit({ role, email, password, adminCode }));
+      navigate("/");
     } catch (err) {
-      setError(err?.message || "Login failed. Try again.");
+      setError(err?.response?.data?.error || "Login failed. Try again.");
     } finally {
       setLoading(false);
     }

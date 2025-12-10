@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 
 const SongSchema = new mongoose.Schema({
-  SongID: { type: String, required: true, unique: true },
-  Title: { type: String, required: true },
+  SongID: {
+    type: String,
+    required: true,
+    unique: true,
+    default: () => new mongoose.Types.ObjectId().toHexString(), // auto-generate
+  },  Title: { type: String, required: true },
   Artist: { type: String, required: true },
   albumArt: { type: String, default: "" },
   playCount: { type: Number, default: 0 },

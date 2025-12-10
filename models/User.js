@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  UserID: { type: String, unique: true }, // NOT required – backend will generate
-  Email: { type: String, required: true, unique: true },
+  UserID: {
+    type: String,
+    unique: true,
+    default: () => new mongoose.Types.ObjectId().toHexString(), // auto-generate
+  },  Email: { type: String, required: true, unique: true },
   Password: { type: String, required: true },
 
   ProfileImageURL: { type: String, default: null },

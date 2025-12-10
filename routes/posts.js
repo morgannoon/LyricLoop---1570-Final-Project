@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const router = express.Router();
 
 const Post = require("../models/Post");
@@ -23,11 +24,25 @@ const authMiddleware = (req, res, next) => {
 // CREATE POST (with optional song creation)
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { Title, Description, SongURL, SongTitle, Artist = "Unknown", albumArt = "" } = req.body;
+    const {
+      Title,
+      Description,
+      SongURL,
+      SongID,
+      SongTitle,
+      Artist = "Unknown",
+      albumArt = "",
+    } = req.body;
 
     let songId = null;
 
-    if (SongTitle && SongURL) {
+    if (SongID) {
+      const existing = await Song.findById(SongID);
+      if (!existing) {
+        return res.status(400).json({ error: "Selected song not found" });
+      }
+      songId = existing._id;
+    } else if (SongTitle) {
       // Check if song already exists
       let song = await Song.findOne({ Title: SongTitle, Artist });
 

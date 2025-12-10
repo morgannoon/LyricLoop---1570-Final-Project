@@ -77,9 +77,23 @@ export const getPosts = async () =>
     return res.data;
   });
 
-export const createPost = async (title, content, image) =>
+export const createPost = async (
+  title,
+  content,
+  image,
+  songId = null,
+  songTitle = "",
+  songArtist = ""
+) =>
   withFallback(async (instance) => {
-    const res = await instance.post("/posts", { Title: title, Description: content, SongURL: image });
+    const res = await instance.post("/posts", {
+      Title: title,
+      Description: content,
+      SongURL: image,
+      SongID: songId,
+      SongTitle: songTitle,
+      Artist: songArtist,
+    });
     return res.data;
   });
 

@@ -46,14 +46,17 @@ export default function CreatePost() {
 
     setLoading(true);
     try {
-      let songInfo = {};
+      let songId = null;
+      let songTitleToSend = "";
+      let songArtistToSend = "";
+
       if (songMode === "existing") {
         if (!existingSongId) {
           setError("Please select a song from the list.");
           setLoading(false);
           return;
         }
-        songInfo.SongID = existingSongId;
+        songId = existingSongId;
       } else {
         // new song
         if (!songTitle || !songArtist) {
@@ -61,11 +64,18 @@ export default function CreatePost() {
           setLoading(false);
           return;
         }
-        songInfo.songTitle = songTitle;
-        songInfo.songArtist = songArtist;
+        songTitleToSend = songTitle;
+        songArtistToSend = songArtist;
       }
 
-      await createPost(title, content, image, songInfo.songTitle, songInfo.songArtist, songInfo.SongID);
+      await createPost(
+        title,
+        content,
+        image,
+        songId,
+        songTitleToSend,
+        songArtistToSend
+      );
 
       setSuccess("Post created successfully!");
       setTitle("");

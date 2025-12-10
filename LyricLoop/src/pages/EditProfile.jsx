@@ -2,17 +2,19 @@ import { useState } from "react";
 import "../styles/EditProfile.css";
 
 export default function EditProfile() {
-  const [username, setUsername] = useState("Morgan"); // default username
-  const [email, setEmail] = useState("morgan@example.com"); // default email
-  const [profilePic, setProfilePic] = useState(""); // URL of profile picture
+  // Default values can come from localStorage or API fetch
+  const storedUser = JSON.parse(localStorage.getItem("user")) || {};
+  const [email, setEmail] = useState(storedUser.Email || "");
+  const [profilePic, setProfilePic] = useState(storedUser.ProfileImageURL || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // For now, just log the updated profile
-    console.log({ username, email, profilePic });
+    console.log({ email, profilePic });
 
     alert("Profile updated! (Check console for data)");
+    // Here you could call an API to update the user's profile in the backend
   };
 
   return (
@@ -20,17 +22,6 @@ export default function EditProfile() {
       <h1 className="edit-profile-title">Edit Profile</h1>
 
       <form onSubmit={handleSubmit} className="edit-profile-form">
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="edit-profile-input"
-          />
-        </label>
-
         <label>
           Email:
           <input
@@ -48,16 +39,10 @@ export default function EditProfile() {
             type="text"
             value={profilePic}
             onChange={(e) => setProfilePic(e.target.value)}
+            placeholder="https://example.com/image.jpg"
             className="edit-profile-input"
           />
         </label>
-
-        {profilePic && (
-          <div className="profile-pic-preview">
-            <p>Preview:</p>
-            <img src={profilePic} alt="Profile Preview" />
-          </div>
-        )}
 
         <button type="submit" className="edit-profile-button">
           Save Changes

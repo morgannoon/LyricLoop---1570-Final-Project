@@ -4,14 +4,19 @@ import { registerUser } from "../api";
 import "../styles/SignUp.css";
 
 export default function SignUp() {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  // Generate a unique UserID  
+  const generateUserID = () =>
+    "user_" + Math.random().toString(36).substring(2, 10);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,13 +28,21 @@ export default function SignUp() {
       return;
     }
 
+    const UserID = generateUserID();
+
     setLoading(true);
+
     try {
-      await registerUser(username, email, password);
+      await registerUser(UserID, email, password);
+
       setSuccess("Account created! Redirecting to login…");
       setTimeout(() => navigate("/login"), 1200);
     } catch (err) {
-      setError(err?.response?.data?.error || err?.message || "Registration failed. Try again.");
+      setError(
+        err?.response?.data?.error ||
+        err?.message ||
+        "Registration failed. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -39,17 +52,8 @@ export default function SignUp() {
     <div className="signup-outer">
       <div className="signup-card">
         <h1>Create your account</h1>
+
         <form onSubmit={handleSubmit} className="signup-form">
-          <label>
-            Username
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              placeholder="Your display name"
-            />
-          </label>
 
           <label>
             Email

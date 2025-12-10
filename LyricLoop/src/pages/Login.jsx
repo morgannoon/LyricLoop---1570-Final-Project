@@ -1,32 +1,22 @@
+// src/pages/Login.jsx
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { loginUser, loginAdmin } from "../api";
 import "../styles/Login.css";
 
-/**
- * Props:
- *  - onSubmit({ role, email, password }) : function to handle submit
- *  - initialRole: "user" | "admin" (optional)
- */
-export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
-  const [role, setRole] = useState(initialRole);
+export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useContext(AuthContext);
+
+  // Set initial mode based on URL
+  const [isAdminMode, setIsAdminMode] = useState(location.pathname === "/admin/login");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
-
-  const toggleRole = () => {
-    setError("");
-    setRole((r) => {
-      const newRole = r === "user" ? "admin" : "user";
-      navigate(newRole === "admin" ? "/admin/login" : "/login");
-      return newRole;
-    });
-  };
-  
 
   const validate = () => {
     if (!email.trim()) return "Email is required.";
@@ -42,14 +32,17 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
     if (v) return setError(v);
 
     setLoading(true);
-    try {
-      const authFn = role === "admin" ? loginAdmin : loginUser;
-      const { token, user, admin } = await authFn(email, password);
-      const principal = role === "admin" ? { ...admin, role: "admin" } : { ...user, role: "user" };
-      login({ user: principal, token });
 
-      await Promise.resolve(onSubmit({ role, email, password }));
-      navigate(role === "admin" ? "/admin" : "/");
+    try {
+      if (isAdminMode) {
+        const { token, admin } = await loginAdmin(email, password);
+        login({ user: { ...admin, role: "admin" }, token });
+        navigate("/admin");
+      } else {
+        const { token, user } = await loginUser(email, password);
+        login({ user: { ...user, role: "user" }, token });
+        navigate("/feed");
+      }
     } catch (err) {
       setError(err?.response?.data?.error || "Login failed. Try again.");
     } finally {
@@ -57,29 +50,26 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
     }
   };
 
+  const toggleMode = () => {
+    setIsAdminMode((prev) => !prev);
+    setError("");
+  };
+
   return (
     <div className="spotify-login-outer">
       <form className="spotify-login-card" onSubmit={handleSubmit} aria-labelledby="login-title">
         <header className="login-header">
           <h1 id="login-title" className="title">
-            {role === "user" ? "Sign in to Spotify" : "Admin Portal"}
+            {isAdminMode ? "Admin Portal" : "Sign in to Spotify"}
           </h1>
-
-          <button
-            type="button"
-            className="role-toggle"
-            onClick={toggleRole}
-            aria-pressed={role === "admin"}
-            aria-label={`Switch to ${role === "user" ? "admin" : "user"} login`}
-          >
-            Switch to {role === "user" ? "Admin" : "User"}
+          <button type="button" className="toggle-btn" onClick={toggleMode}>
+            {isAdminMode ? "Switch to User Login" : "Switch to Admin Login"}
           </button>
         </header>
 
         <div className="field">
-          <label htmlFor="email">Email</label>
+          <label>Email</label>
           <input
-            id="email"
             type="email"
             placeholder="you@music.com"
             value={email}
@@ -90,9 +80,8 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
         </div>
 
         <div className="field">
-          <label htmlFor="password">Password</label>
+          <label>Password</label>
           <input
-            id="password"
             type="password"
             placeholder="••••••••"
             value={password}
@@ -102,21 +91,19 @@ export default function Login({ onSubmit = () => {}, initialRole = "user" }) {
           />
         </div>
 
-        {error && <div role="alert" className="error">{error}</div>}
+        {error && <div className="error">{error}</div>}
 
         <button className="submit-btn" type="submit" disabled={loading}>
-          {loading ? "Signing in…" : role === "user" ? "Sign in" : "Sign in as Admin"}
+          {loading ? "Signing in…" : "Sign in"}
         </button>
 
-        <footer className="login-footer">
-          {role === "user" ? (
+        {!isAdminMode && (
+          <footer className="login-footer">
             <p>
               Don’t have an account? <a href="/signup">Sign up</a>
             </p>
-          ) : (
-            <p className="admin-note">Admin access is logged. Make sure you have permission.</p>
-          )}
-        </footer>
+          </footer>
+        )}
       </form>
     </div>
   );

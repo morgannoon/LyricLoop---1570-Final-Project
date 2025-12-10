@@ -56,18 +56,36 @@ export default function BlogFeed() {
 
   const handleSave = async (id) => {
     try {
-      const updated = await updatePost(
+      // Find the original post in state
+      const originalPost = posts.find((p) => p._id === id);
+      if (!originalPost) return;
+  
+      // Call API to update the post
+      await updatePost(
         id,
         editTitle,
         editContent,
-        posts.find((p) => p._id === id)?.SongURL || posts.find((p) => p._id === id)?.image || ""
+        originalPost.SongURL || originalPost.image || ""
       );
-      setPosts((prev) => prev.map((p) => (p._id === id ? updated : p)));
+  
+      // Merge changes into the original post to preserve author info
+      const updatedPost = {
+        ...originalPost,
+        Title: editTitle,
+        Description: editContent,
+      };
+  
+      // Update posts in state
+      setPosts((prev) =>
+        prev.map((p) => (p._id === id ? updatedPost : p))
+      );
+  
       setEditingId(null);
     } catch (err) {
       setError(err?.response?.data?.error || "Could not update the post.");
     }
   };
+  
 
   const handleCancel = () => {
     setEditingId(null);

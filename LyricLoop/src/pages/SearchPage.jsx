@@ -1,31 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUsers, getSongs } from "../api";
 import "../styles/SearchPage.css";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
+  const [users, setUsers] = useState([]);
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Sample users and songs data
-  const users = [
-    { id: 1, name: "Morgan" },
-    { id: 2, name: "Alex" },
-    { id: 3, name: "Taylor" },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError("");
 
-  const songs = [
-    { id: 1, title: "Lost in the Echo", artist: "Linkin Park" },
-    { id: 2, title: "Dreams", artist: "Fleetwood Mac" },
-    { id: 3, title: "Blinding Lights", artist: "The Weeknd" },
-  ];
+      try {
+        const usersData = await getUsers();
+        const songsData = await getSongs();
 
-  // Filter based on query
+        // Make sure the response is an array
+        setUsers(Array.isArray(usersData) ? usersData : []);
+        setSongs(Array.isArray(songsData) ? songsData : []);
+      } catch (err) {
+        setError(err?.response?.data?.error || "Failed to load data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Filter only after data is loaded
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(query.toLowerCase())
+    user.Email.toLowerCase().includes(query.toLowerCase())
   );
 
   const filteredSongs = songs.filter(
     (song) =>
-      song.title.toLowerCase().includes(query.toLowerCase()) ||
-      song.artist.toLowerCase().includes(query.toLowerCase())
+      song.Title.toLowerCase().includes(query.toLowerCase()) ||
+      song.SongURL?.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -40,13 +54,16 @@ export default function SearchPage() {
         className="search-input"
       />
 
+      {loading && <p>Loading...</p>}
+      {error && <p className="no-results">{error}</p>}
+
       <div className="search-section">
         <h2>Users</h2>
         {filteredUsers.length > 0 ? (
           <ul className="search-list">
             {filteredUsers.map((user) => (
-              <li key={user.id} className="search-list-item">
-                {user.name}
+              <li key={user._id || user.UserID} className="search-list-item">
+                {user.Email}
               </li>
             ))}
           </ul>
@@ -60,8 +77,8 @@ export default function SearchPage() {
         {filteredSongs.length > 0 ? (
           <ul className="search-list">
             {filteredSongs.map((song) => (
-              <li key={song.id} className="search-list-item">
-                {song.title} — {song.artist}
+              <li key={song._id} className="search-list-item">
+                {song.Title} — {song.SongURL}
               </li>
             ))}
           </ul>

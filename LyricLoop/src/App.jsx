@@ -58,7 +58,8 @@ function App() {
 
           {/* Create Post page */}
           <Route path="/create" element={<CreatePost />} />
-
+          {/* Blog feed (main user home) */}
+          <Route path="/feed" element={<BlogFeed />} />
           {/* Search page */}
           <Route path="/search" element={<SearchPage />} />
 
